@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNet.Identity;
+@using TeamP.Models.Extensions;
+@using TeamP.Models;
+@model  TeamP.Models.Post
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!--<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-lg-4">
+            <div class="card">
+                <img alt="Card image cap" class="card-img-top img-fluid" src="@User.Identity.GetUrlPicture()" width="200" height="200" />
+                <div class="card-block">
+                    <h4 class="card-title"> @User.Identity.GetLogin() </h4>
+
+                    <p class="card-text">@User.Identity.GetUserRole()</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-4">
+            @using (Html.BeginForm("Post", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group purple-border">
+
+                        <textarea class="form-control purple-border" id="PostText" style="min-width: 100%" name="PostText" type="text" placeholder="Write something here..." rows="5"></textarea>
+                        @Html.ValidationMessageFor(model => model.PostText, "", new { @class = "text-danger" })
+                        <input type="hidden" id="UserID" name="UserID" value='@User.Identity.GetUserId()' />
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="text-right">
+                                <input type="submit" value="Post" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-4 col-lg-4">
+            <div class="text-center">
+                @if (User.Identity.GetUserRole() == "Teacher")
+                {
+                    @Html.ActionLink("Create New Course", "CreateCourse", "Home");
+                }
+                <br />
+                @foreach (var course in ViewBag.courses)
+                {
+                    if (course != null)
+                    {
+                        @course.CourseTitle
+                        <br />
+                    }
+                    //@Html.ActionLink("course.", "CreateCourse", "Home");
+                }
+            </div>
+        </div>
+    </div>
+
+
+        @foreach (var post in ViewBag.Posts)
+        {
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+
+                <div class="col-md-4">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @post.Login
+                                </td>
+                                <td>
+                                    @post.PostDate
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">@post.PostText</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        }
+    </div>

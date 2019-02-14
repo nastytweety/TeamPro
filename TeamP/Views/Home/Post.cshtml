@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNet.Identity
+@model TeamP.Models.Post
+
+
+@{
+    ViewBag.Title = "Post";
+}
+
+<h2>Post</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Post</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <!-- @Html.LabelFor(model => model.PostText, htmlAttributes: new { @class = "control-label col-md-2" })-->
+            <div class="col-md-10">
+                <textarea class="form-control rounded-0" id="PostText" name="PostText" type="text" value="" rows="3"></textarea>
+                @Html.ValidationMessageFor(model => model.PostText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <input type="hidden" id="UserID" name="UserID" value='@User.Identity.GetUserId()' />
+        <input type="hidden" id="UserName" name="UserName" value='@User.Identity.GetUserName()' />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
